@@ -76,10 +76,11 @@ def transpose_execution():
         # perm show what dimensions should replace by id during transpose
         # e.g. 3 had 2 index but has 1 in new tensors shape
         # idea to get new kind of information replacing colums and rows in initial data
-        trn = tf.transpose(a, perm=[2, 1, 0])
+        trn = tf.transpose(a, perm=[0, 2, 1])
         print(trn.get_shape())
         print(trn.eval())
         print("##########")
+        print("shape by default")
         trn_default = tf.transpose(a)
         print(trn_default.get_shape())
         print(trn_default.eval())
