@@ -65,12 +65,33 @@ def reverse_execution():
         print(rvs.eval())
 
 
+def transpose_execution():
+    with tf.Graph().as_default(), tf.Session():
+        a = tf.constant([[
+            [1,  2,  3],
+            [4,  5,  6]],
+            [[7,  8,  9],
+             [10, 11, 12]]])
+        # initial shape for a is (2,2,3)->using perm=[0, 2, 1] should have new shape for tensor (2,3,2)
+        # perm show what dimensions should replace by id during transpose
+        # e.g. 3 had 2 index but has 1 in new tensors shape
+        # idea to get new kind of information replacing colums and rows in initial data
+        trn = tf.transpose(a, perm=[2, 1, 0])
+        print(trn.get_shape())
+        print(trn.eval())
+        print("##########")
+        trn_default = tf.transpose(a)
+        print(trn_default.get_shape())
+        print(trn_default.eval())
+
+
 def dice_simulation():
     pass
 
 if __name__ == "__main__":
-    # multiply_tensors()
+    # multiply_execution()
     # slice_execution()
     # tile_execution()
     # stack_unstack_execution()
-    reverse_execution()
+    # reverse_execution()
+    transpose_execution()
