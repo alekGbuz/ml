@@ -89,7 +89,6 @@ def transpose_execution():
 def space_to_batch_execution():
     # about batch
     # https://stackoverflow.com/questions/41175401/what-is-a-batch-in-tensorflow
-    # initial positions by indexes is saved after method execution
     with tf.Graph().as_default(), tf.Session():
         a = tf.constant([[[[1], [2]], [[3], [4]]]])
         # paddings ingeneral change indexes by step equal padding/block_size
