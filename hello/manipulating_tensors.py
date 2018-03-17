@@ -75,7 +75,7 @@ def transpose_execution():
         # initial shape for a is (2,2,3)->using perm=[0, 2, 1] should have new shape for tensor (2,3,2)
         # perm show what dimensions should replace by id during transpose
         # e.g. 3 had 2 index but has 1 in new tensors shape
-        # idea to get new kind of information replacing colums and rows in initial data
+        # idea to get new kind of information replacing columns and rows in initial data
         trn = tf.transpose(a, perm=[0, 2, 1])
         print(trn.get_shape())
         print(trn.eval())
@@ -84,6 +84,27 @@ def transpose_execution():
         trn_default = tf.transpose(a)
         print(trn_default.get_shape())
         print(trn_default.eval())
+
+
+def space_to_batch_execution():
+    # about batch
+    # https://stackoverflow.com/questions/41175401/what-is-a-batch-in-tensorflow
+    # initial positions by indexes is saved after method execution
+    with tf.Graph().as_default(), tf.Session():
+        a = tf.constant([[[[1], [2]], [[3], [4]]]])
+        # paddings ingeneral change indexes by step equal padding/block_size
+        # add additional zeros
+        # block_size: Non-overlapping blocks of size block_size x block size in
+        # the height and width dimensions are rearranged into the batch dimension at each location.
+        # so use to understand how much parts will be created from initial data
+        stb = tf.space_to_batch(a, paddings=[[0, 0], [0, 0]], block_size=2)
+        print(stb.eval())
+        print("##########")
+        # customize out put
+        # divides "spatial" dimensions [1, ..., M] of the input into a grid of blocks of shape block_shape
+        stbn = tf.space_to_batch_nd(a, block_shape=[1, 2], paddings=[[0, 0], [0, 0]])
+        print(stbn.eval())
+
 
 
 def dice_simulation():
@@ -95,4 +116,5 @@ if __name__ == "__main__":
     # tile_execution()
     # stack_unstack_execution()
     # reverse_execution()
-    transpose_execution()
+    # transpose_execution()
+    space_to_batch_execution()
