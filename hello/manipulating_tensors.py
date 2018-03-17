@@ -105,6 +105,12 @@ def space_to_batch_execution():
         print(stbn.eval())
 
 
+def batch_to_space_execution():
+    with tf.Graph().as_default(), tf.Session():
+        a = tf.constant([[[[1]]], [[[2]]], [[[3]]], [[[4]]]])
+        bts = tf.batch_to_space(a, crops=[[0, 0], [0, 0]], block_size=2)
+        print(bts.eval())
+
 
 def dice_simulation():
     pass
@@ -116,4 +122,5 @@ if __name__ == "__main__":
     # stack_unstack_execution()
     # reverse_execution()
     # transpose_execution()
-    space_to_batch_execution()
+    # space_to_batch_execution()
+    batch_to_space_execution()
