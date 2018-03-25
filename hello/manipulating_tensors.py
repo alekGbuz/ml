@@ -91,17 +91,23 @@ def space_to_batch_execution():
     # https://stackoverflow.com/questions/41175401/what-is-a-batch-in-tensorflow
     with tf.Graph().as_default(), tf.Session():
         a = tf.constant([[[[1], [2]], [[3], [4]]]])
-        # paddings ingeneral change indexes by step equal padding/block_size
+        print(a.get_shape())
+        # from a.get_shape() possible to get data for such things as 4-D with shape [batch, height, width, depth].
+        print("##########")
+        # paddings in general change indexes by step equal padding/block_size
         # add additional zeros
         # block_size: Non-overlapping blocks of size block_size x block size in
         # the height and width dimensions are rearranged into the batch dimension at each location.
-        # so use to understand how much parts will be created from initial data
+        # (so should save indexes of element from old to new?)
+        # use to understand how much parts will be created from initial data
         stb = tf.space_to_batch(a, paddings=[[0, 0], [0, 0]], block_size=2)
+        print(stb.get_shape())
         print(stb.eval())
         print("##########")
         # customize out put
         # divides "spatial" dimensions [1, ..., M] of the input into a grid of blocks of shape block_shape
         stbn = tf.space_to_batch_nd(a, block_shape=[1, 2], paddings=[[0, 0], [0, 0]])
+        print(stbn.get_shape())
         print(stbn.eval())
 
 
@@ -113,7 +119,17 @@ def batch_to_space_execution():
 
 
 def dice_simulation():
-    pass
+    # Create a dice simulation, which generates a 10x3 2-D tensor in which:
+    # Columns 1 and 2 each hold one throw of one die.
+    # Column 3 holds the sum of Columns 1 and 2 on the same row
+    with tf.Graph().as_default(), tf.Session() as sess:
+        c1 = tf.Variable(tf.random_uniform([10, 1], minval=1, maxval=7, dtype=tf.int32))
+        c2 = tf.Variable(tf.random_uniform([10, 1], minval=1, maxval=7, dtype=tf.int32))
+        initial = tf.global_variables_initializer()
+        sess.run(initial)
+        result = tf.concat([tf.concat([c1, c2], 1), tf.add(c1, c2)], 1)
+        print(result.eval())
+
 
 if __name__ == "__main__":
     # multiply_execution()
@@ -123,4 +139,4 @@ if __name__ == "__main__":
     # reverse_execution()
     # transpose_execution()
     # space_to_batch_execution()
-    batch_to_space_execution()
+    dice_simulation()
