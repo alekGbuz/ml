@@ -118,6 +118,23 @@ def batch_to_space_execution():
         print(bts.eval())
 
 
+def batch_shuffle_repeat():
+    with tf.Graph().as_default(), tf.Session() as sess:
+        inc_dataset = tf.data.Dataset.range(100)
+        dec_dataset = tf.data.Dataset.range(0, -100, -1)
+        dataset = tf.data.Dataset.zip((inc_dataset, dec_dataset))
+        # batch - divided initial data to several parts with 50 elements in it
+        # repeat - amount of possible execution of initial dataset e.g. 1 time of 2 parts by 50 elements
+        # shuffle - mix 2 of batches
+        batched_dataset = dataset.batch(50).repeat(1).shuffle(buffer_size=2)
+        iterator = batched_dataset.make_one_shot_iterator()
+        next_element = iterator.get_next()
+        print(sess.run(next_element))
+        print(sess.run(next_element))
+        # error
+        # print(sess.run(next_element))
+
+
 def dice_simulation():
     # Create a dice simulation, which generates a 10x3 2-D tensor in which:
     # Columns 1 and 2 each hold one throw of one die.
@@ -139,4 +156,5 @@ if __name__ == "__main__":
     # reverse_execution()
     # transpose_execution()
     # space_to_batch_execution()
+    # batch_shuffle_repeat()
     dice_simulation()
