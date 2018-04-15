@@ -15,6 +15,9 @@ california_housing_dataframe = california_housing_dataframe.reindex(
 california_housing_dataframe["median_house_value"] /= 1000.0
 california_housing_dataframe["rooms_per_person"] = california_housing_dataframe["total_rooms"]/california_housing_dataframe["population"]
 
+#rooms per person should be less 5
+california_housing_dataframe["rooms_per_person"] = california_housing_dataframe["rooms_per_person"].apply(lambda x: min(x, 5))
+
 print(california_housing_dataframe.head())
 
 
@@ -32,10 +35,10 @@ def my_input_fn(features, targets, batch_size=1, shuffle=True, num_epochs=None):
     """
 
     # Convert pandas data into a dict of np arrays.
-    features = {key:np.array(value) for key,value in dict(features).items()}
+    features = {key:np.array(value) for key, value in dict(features).items()}
 
     # Construct a dataset, and configure batching/repeating.
-    ds = Dataset.from_tensor_slices((features,targets)) # warning: 2GB limit
+    ds = Dataset.from_tensor_slices((features, targets)) # warning: 2GB limit
     ds = ds.batch(batch_size).repeat(num_epochs)
 
     # Shuffle the data, if specified.
@@ -130,8 +133,8 @@ def train_model(learning_rate, steps, batch_size, input_feature="total_rooms"):
     print("Model training finished.")
     # Output a graph of loss metrics over periods.
     plt.subplot(1, 3, 2)
-    plt.ylabel('RMSE')
-    plt.xlabel('Periods')
+    plt.ylabel("RMSE")
+    plt.xlabel("Periods")
     plt.title("Root Mean Squared Error vs. Periods")
     plt.tight_layout()
     plt.plot(root_mean_squared_errors)
