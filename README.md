@@ -1,1 +1,1 @@
-https://developers.google.com/machine-learning/crash-course/exercises
+Machine learning exercises
